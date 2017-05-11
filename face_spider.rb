@@ -12,9 +12,9 @@ require 'open-uri'
 require 'rest-client'
 require 'addressable/uri'
 
-each_imgs = 200
-worker_threads = 100
-ignore_exist = true
+each_imgs = 200       # total download number per people
+worker_threads = 100   # total worker threads per process
+ignore_exist = true    # true: skip completed, false: re-download all
 root_dir = File.absolute_path(File.dirname(__FILE__))  #./result/*, ./data/asian_id_name_mapping.tsv
 result_dir = "#{root_dir}/face_result"
 Dir.mkdir result_dir unless File.exist?(result_dir)

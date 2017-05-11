@@ -1,13 +1,20 @@
 # encoding: UTF-8
+
+# Usage:
+#1.  download images while get URLs, total 100 threads:    
+#        ruby face_spider_other.rb    
+#2.  split to n, firstly get URLs, then download images:
+#        ruby face_spider_other.rb  2 1 1, ruby face_spider.rb  2 2 1  # $1=2: split to 2 parts, $2=1,2: the 1rd or the 2nd part, $3=1: total 100*2 threads for get URLs  
+#        ruby face_spider_other.rb  2 1 2, ruby face_spider.rb  2 2 2  # $1=2: split to 2 parts, $2=1,2: the 1rd or the 2nd part, $3=2: total 100*2 threads for download images
 require 'json'
 require 'thread'
 require 'open-uri'
 require 'rest-client'
 require 'addressable/uri'
 
-each_imgs = 200
-worker_threads = 100
-ignore_exist = true
+each_imgs = 200       # total download number per people
+worker_threads = 100   # total worker threads per process
+ignore_exist = true    # true: skip completed, false: re-download all
 root_dir = File.absolute_path(File.dirname(__FILE__))  #./result/*, ./data/asian_id_name_mapping.tsv
 result_dir = "#{root_dir}/face_other_result"
 Dir.mkdir result_dir unless File.exist?(result_dir)
@@ -66,14 +73,15 @@ $mutex = Mutex.new
 url_threads = download_threads = lines = []
 header = {"User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36"}
 config_file = "#{root_dir}/data/wiki.txt"
-except_file = "#{root_dir}/data/asian_id_name_mapping.tsv"
 record_file = "#{root_dir}/data/face_other_download_records_#{$split}_#{$n}.txt"
 download_log = "#{record_file}.log"
 
 if $flag == 0 || $flag == 1
   File.delete(record_file) if File.exist?(record_file)
   max_length = (each_imgs*1.25).to_i
+  except_file = "#{root_dir}/data/asian_id_name_mapping.tsv"
   except_lines=IO.readlines(except_file).map{|line| line.gsub(/(\r)|(\n)/,"").split("\t").delete_if{|a| a.nil?||a.strip==""}[1] rescue ""} unless except_file.nil?
+  # except_lines=[]
   if $queue_names.empty?
     lines=IO.readlines(config_file)
     split_length=lines.length/$split
