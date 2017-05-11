@@ -4,8 +4,8 @@
 #1.  download images while get URLs, total 100 threads:    
 #        ruby face_spider.rb    
 #2.  split to n, firstly get URLs, then download images:
-#        ruby face_spider.rb  2 1 1, ruby face_spider.rb  2 2 1  # $1=2: split to 2 parts, $2=1,2: the 1rd or the 2nd part, $3=1: total 100*2 threads for get URLs  
-#        ruby face_spider.rb  2 1 2, ruby face_spider.rb  2 2 2  # $1=2: split to 2 parts, $2=1,2: the 1rd or the 2nd part, $3=2: total 100*2 threads for download images
+#        ruby face_spider.rb  2 1 1; ruby face_spider.rb  2 2 1  # $1=2: split to 2 parts; $2=1,2: the 1rd or the 2nd part; $3=1: total 100*2 threads for get URLs  
+#        ruby face_spider.rb  2 1 2; ruby face_spider.rb  2 2 2  # $1=2: split to 2 parts; $2=1,2: the 1rd or the 2nd part; $3=2: total 100*2 threads for download images
 require 'json'
 require 'thread'
 require 'open-uri'
